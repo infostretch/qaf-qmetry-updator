@@ -21,7 +21,7 @@
  * For any inquiry or need additional information, please contact support-qaf@infostretch.com
  *******************************************************************************/
 
-package com.infostretch.automation.integration.qmetry.qmetry6.patch;
+package com.qmetry.qaf.automation.integration.qmetry.qmetry6;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,15 +30,15 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.impl.LogFactoryImpl;
 
-import com.infostretch.automation.integration.TestCaseResultUpdator;
-import com.infostretch.automation.integration.TestCaseRunResult;
-import com.infostretch.automation.integration.qmetry.QmetryWebserviceParameter.QmetryWSParameters;
-import com.infostretch.automation.integration.qmetry.qmetry6.scheduler.Qmetry6SchedulerFilter;
-import com.infostretch.automation.integration.qmetry.qmetry6.scheduler.schedulerJsonPojo.Testcase;
-import com.infostretch.automation.keys.ApplicationProperties;
-import com.infostretch.automation.util.FileUtil;
-import com.infostretch.automation.util.StringComparator;
-import com.infostretch.automation.util.StringUtil;
+import com.qmetry.qaf.automation.integration.TestCaseResultUpdator;
+import com.qmetry.qaf.automation.integration.TestCaseRunResult;
+import com.qmetry.qaf.automation.integration.qmetry.QmetryWebserviceParameter.QmetryWSParameters;
+import com.qmetry.qaf.automation.integration.qmetry.qmetry6.scheduler.Qmetry6SchedulerFilter;
+import com.qmetry.qaf.automation.integration.qmetry.qmetry6.scheduler.schedulerJsonPojo.Testcase;
+import com.qmetry.qaf.automation.keys.ApplicationProperties;
+import com.qmetry.qaf.automation.util.FileUtil;
+import com.qmetry.qaf.automation.util.StringComparator;
+import com.qmetry.qaf.automation.util.StringUtil;
 
 /**
  * Implementation of {@link TestCaseResultUpdator} to update results on QMetry
@@ -51,52 +51,66 @@ public class QMetry6ResultUpdator implements TestCaseResultUpdator {
 
 	@Override
 	public boolean updateResult(Map<String, ? extends Object> params, TestCaseRunResult result, String log) {
-		File[] attachments = null;
-		long id = 0;
-		boolean isRunid = false;
-		if ((null != Qmetry6SchedulerFilter.tcMap)
-				&& Qmetry6SchedulerFilter.tcMap.containsKey((String) params.get("sign"))) {
-			Testcase tc = Qmetry6SchedulerFilter.tcMap.get((String) params.get("sign"));
-			if ((tc != null) && (tc.getTcrunId() > 0)) {
-				id = tc.getTcrunId();
-				isRunid = true;
+		try {
+			File[] attachments = null;
+			long id = 0;
+			String scriptName = "";
+			boolean isRunid = false;
+			if ((null != Qmetry6SchedulerFilter.tcMap)
+					&& Qmetry6SchedulerFilter.tcMap.containsKey((String) params.get("sign"))) {
+				Testcase tc = Qmetry6SchedulerFilter.tcMap.get((String) params.get("sign"));
+				if ((tc != null) && (tc.getTcrunId() > 0)) {
+					id = tc.getTcrunId();
+					isRunid = true;
+				} else {
+					id = tc.getTestcaseId();
+				}
 			} else {
-				id = tc.getTestcaseId();
+				id = getRunId(params);
+				if (id > 0) {
+					isRunid = true;
+				} else {
+					id = getTCID(params);
+				}
 			}
-		} else {
-			id = getRunId(params);
-			if (id > 0) {
-				isRunid = true;
-			} else {
-				id = getTCID(params);
+			if (id == 0) {
+				String sign = (String) params.get("sign");
+				logger.error("no valid qmetry testcase mapping id found for " + sign);
+				String sign1 = sign.split("instance:")[1].split("@")[0];
+				scriptName = sign1 + "." + params.get("name");
 			}
-		}
-		if (id == 0) {
-			logger.error("no valid qmetry testcase mapping id found for " + (String) params.get("sign"));
-			return false;
-		}
-		logger.info("Updating result [" + result.toQmetry6() + "] for [" + (String) params.get("sign") + "] using "
-				+ (isRunid ? "runid [" : "tcid [") + id + "]");
-
-		updateResult(id, result, isRunid);
-		if (ApplicationProperties.INTEGRATION_TOOL_QMETRY_UPLOADATTACHMENTS.getBoolenVal(true)) {
-			addAttachments(log, (String) params.get("name"), id, isRunid);
+			logger.info("Updating result [" + result.toQmetry6() + "] for [" + (String) params.get("sign")
+					+ (id == 0 ? "] without test case Id. It will create automatically"
+							: "] using " + (isRunid ? "runid [" : "tcid [") + id + "]"));
 			try {
-				attachments = (File[]) params.get(QmetryWSParameters.Attachments.name());
-				addAttachments(id, isRunid, attachments);
+				updateResult(id, result, isRunid, scriptName);
 			} catch (Exception e) {
-				logger.error(e);
+				e.printStackTrace();
 			}
+			if (ApplicationProperties.INTEGRATION_TOOL_QMETRY_UPLOADATTACHMENTS.getBoolenVal(true)) {
+				addAttachments(log, (String) params.get("name"), id, isRunid);
+				try {
+					attachments = (File[]) params.get(QmetryWSParameters.Attachments.name());
+					addAttachments(id, isRunid, attachments);
+				} catch (Exception e) {
+					logger.error(e);
+				}
 
+			}
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		return true;
+		return false;
 	}
 
 	private Qmetry6WsUtil util = Qmetry6WsUtil.getInstance();
 
-	private void updateResult(long id, TestCaseRunResult result, boolean isRunid) {
+	private void updateResult(long id, TestCaseRunResult result, boolean isRunid, String scriptName) {
+
 		boolean retVal = isRunid ? util.executeTestCaseUsingRunId(id, result.toQmetry6())
-				: util.executeTestCase(id, result.toQmetry6());
+				: (id == 0 ? util.executeTestCaseWithoutID(scriptName, result.toQmetry6())
+						: util.executeTestCase(id, result.toQmetry6()));
 		;
 		logger.info("Update result staus using " + (isRunid ? "runid " : "tcid ") + id + " is: " + retVal);
 

@@ -21,7 +21,7 @@
  * For any inquiry or need additional information, please contact support-qaf@infostretch.com
  *******************************************************************************/
 
-package com.infostretch.automation.integration.qmetry.testnglistener;
+package com.qmetry.qaf.automation.integration.qmetry.testnglistener;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -37,8 +37,8 @@ import org.testng.IMethodSelector;
 import org.testng.IMethodSelectorContext;
 import org.testng.ITestNGMethod;
 
-import com.infostretch.automation.core.ConfigurationManager;
-import com.infostretch.automation.integration.qmetry.QmetryWSUtil;
+import com.qmetry.qaf.automation.core.ConfigurationManager;
+import com.qmetry.qaf.automation.integration.qmetry.QmetryWSUtil;
 import com.qmetry.schedule.jax.Schedule;
 import com.qmetry.schedule.jax.Schedules;
 import com.qmetry.schedule.jax.Testcase;

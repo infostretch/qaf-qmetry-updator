@@ -21,7 +21,7 @@
  * For any inquiry or need additional information, please contact support-qaf@infostretch.com
  *******************************************************************************/
 
-package com.infostretch.automation.integration.qmetry.qmetry6.scheduler.schedulerJsonPojo;
+package com.qmetry.qaf.automation.integration.qmetry.qmetry6.scheduler.schedulerJsonPojo;
 
 import javax.annotation.Generated;
 

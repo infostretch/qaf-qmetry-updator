@@ -21,7 +21,7 @@
  * For any inquiry or need additional information, please contact support-qaf@infostretch.com
  *******************************************************************************/
 
-package com.infostretch.automation.integration.qmetry;
+package com.qmetry.qaf.automation.integration.qmetry;
 
 import java.io.File;
 import java.net.URL;
@@ -29,11 +29,11 @@ import java.rmi.RemoteException;
 
 import org.apache.log4j.Logger;
 
-import com.infostretch.automation.core.ConfigurationManager;
-import com.infostretch.automation.keys.ApplicationProperties;
-import com.infostretch.automation.util.FileUtil;
-import com.infostretch.automation.util.PropertyUtil;
-import com.infostretch.automation.util.StringUtil;
+import com.qmetry.qaf.automation.core.ConfigurationManager;
+import com.qmetry.qaf.automation.keys.ApplicationProperties;
+import com.qmetry.qaf.automation.util.FileUtil;
+import com.qmetry.qaf.automation.util.PropertyUtil;
+import com.qmetry.qaf.automation.util.StringUtil;
 import com.qmetry.ws.client.QMetryWSLocator;
 import com.qmetry.ws.client.QMetryWSSOAPBindingStub;
 

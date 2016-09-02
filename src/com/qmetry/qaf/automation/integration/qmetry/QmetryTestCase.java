@@ -21,30 +21,57 @@
  * For any inquiry or need additional information, please contact support-qaf@infostretch.com
  *******************************************************************************/
 
+package com.qmetry.qaf.automation.integration.qmetry;
 
-package com.infostretch.automation.integration.qmetry;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.TYPE;
 
-import com.infostretch.automation.core.ConfigurationManager;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 
-public class QmetryWebserviceParameter {
-	public enum QmetryWSParameters {
-		Project("integration.param.qmetry.project"), Release("integration.param.qmetry.release"), Build(
-				"integration.param.qmetry.build"), Cycle("integration.param.qmetry.cycle"), SuiteId(
-						"integration.param.qmetry.suitid"), Platform("integration.param.qmetry.platform"), Drop(
-								"integration.param.qmetry.drop"), Attachments("");
-		private String defaultVal;
+/**
+ * Use this annotation to override default parameters at class or test level. If
+ * Scheduler xml file is provided it will use this parameters for filter.
+ * 
+ * @author chirag
+ */
+@Retention(java.lang.annotation.RetentionPolicy.RUNTIME)
+@Target({ METHOD, TYPE })
+public @interface QmetryTestCase {
+	/**
+	 * Test case id to be mapped with QMetry test case.
+	 * 
+	 * @return
+	 */
+	/**
+	 * map with QMetry test case id. separate with comma if more than one test
+	 * case id to map
+	 */
+	String TC_ID() default "";
 
-		private QmetryWSParameters(String def) {
-			defaultVal = def;
-		}
+	/**
+	 * @return
+	 */
+	String build() default "";
 
-		public String getDefaultVal() {
+	String project() default "";
 
-			if (defaultVal == "") {
-				return "";
-			}
-			return ConfigurationManager.getBundle().getString(defaultVal, "");
-		}
-	}
+	String release() default "";
 
+	/**
+	 * map with QMetry test case run id. separate with comma if more than one
+	 * run id to map
+	 * 
+	 * @return
+	 */
+	String runId() default "";
+
+	String testScriptName() default "";
+
+	/**
+	 * mark for not to map with QMetry
+	 * 
+	 * @return
+	 */
+	boolean skip() default false;
 }

@@ -22,27 +22,29 @@
  *******************************************************************************/
 
 
-package com.infostretch.automation.integration.qmetry;
+package com.qmetry.qaf.automation.integration.qmetry;
 
-import java.util.Map;
+import com.qmetry.qaf.automation.core.ConfigurationManager;
 
-import com.infostretch.automation.integration.TestCaseRunResult;
+public class QmetryWebserviceParameter {
+	public enum QmetryWSParameters {
+		Project("integration.param.qmetry.project"), Release("integration.param.qmetry.release"), Build(
+				"integration.param.qmetry.build"), Cycle("integration.param.qmetry.cycle"), SuiteId(
+						"integration.param.qmetry.suitid"), Platform("integration.param.qmetry.platform"), Drop(
+								"integration.param.qmetry.drop"), Attachments("");
+		private String defaultVal;
 
-public class QmetryTCUpdator {
-	static Map<String, Long> tcMap;
+		private QmetryWSParameters(String def) {
+			defaultVal = def;
+		}
 
-	public boolean updateResult(String scriptName, TestCaseRunResult result) {
-		boolean succes = false;
-		// get runid from map for scriptname update result using runid
-		return succes;
+		public String getDefaultVal() {
+
+			if (defaultVal == "") {
+				return "";
+			}
+			return ConfigurationManager.getBundle().getString(defaultVal, "");
+		}
 	}
 
-	public static void setMap(String scheduleXml) {
-		// call this method on test suit start up to map test script name with
-		// run-id
-	}
-
-	public static void clearMap() {
-		// call this method on test suit end to clear map
-	}
 }

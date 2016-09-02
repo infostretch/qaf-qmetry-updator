@@ -10,7 +10,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.infostretch.automation.integration.qmetry.qmetry6.scheduler.schedulerJsonPojo;
+package com.qmetry.qaf.automation.integration.qmetry.qmetry6.scheduler.schedulerJsonPojo;
 
 import java.util.ArrayList;
 import java.util.List;

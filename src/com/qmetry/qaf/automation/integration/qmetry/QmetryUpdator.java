@@ -21,7 +21,7 @@
  * For any inquiry or need additional information, please contact support-qaf@infostretch.com
  *******************************************************************************/
 
-package com.infostretch.automation.integration.qmetry;
+package com.qmetry.qaf.automation.integration.qmetry;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,14 +30,14 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.impl.LogFactoryImpl;
 
-import com.infostretch.automation.integration.TestCaseResultUpdator;
-import com.infostretch.automation.integration.TestCaseRunResult;
-import com.infostretch.automation.integration.qmetry.QmetryWebserviceParameter.QmetryWSParameters;
-import com.infostretch.automation.integration.qmetry.testnglistener.QmetrySchedulerFilter;
-import com.infostretch.automation.keys.ApplicationProperties;
-import com.infostretch.automation.util.FileUtil;
-import com.infostretch.automation.util.StringComparator;
-import com.infostretch.automation.util.StringUtil;
+import com.qmetry.qaf.automation.integration.TestCaseResultUpdator;
+import com.qmetry.qaf.automation.integration.TestCaseRunResult;
+import com.qmetry.qaf.automation.integration.qmetry.QmetryWebserviceParameter.QmetryWSParameters;
+import com.qmetry.qaf.automation.integration.qmetry.testnglistener.QmetrySchedulerFilter;
+import com.qmetry.qaf.automation.keys.ApplicationProperties;
+import com.qmetry.qaf.automation.util.FileUtil;
+import com.qmetry.qaf.automation.util.StringComparator;
+import com.qmetry.qaf.automation.util.StringUtil;
 import com.qmetry.schedule.jax.Testcase;
 
 /**

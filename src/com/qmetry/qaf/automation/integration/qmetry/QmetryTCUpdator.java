@@ -21,57 +21,28 @@
  * For any inquiry or need additional information, please contact support-qaf@infostretch.com
  *******************************************************************************/
 
-package com.infostretch.automation.integration.qmetry;
 
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.ElementType.TYPE;
+package com.qmetry.qaf.automation.integration.qmetry;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
+import java.util.Map;
 
-/**
- * Use this annotation to override default parameters at class or test level. If
- * Scheduler xml file is provided it will use this parameters for filter.
- * 
- * @author chirag
- */
-@Retention(java.lang.annotation.RetentionPolicy.RUNTIME)
-@Target({ METHOD, TYPE })
-public @interface QmetryTestCase {
-	/**
-	 * Test case id to be mapped with QMetry test case.
-	 * 
-	 * @return
-	 */
-	/**
-	 * map with QMetry test case id. separate with comma if more than one test
-	 * case id to map
-	 */
-	String TC_ID() default "";
+import com.qmetry.qaf.automation.integration.TestCaseRunResult;
 
-	/**
-	 * @return
-	 */
-	String build() default "";
+public class QmetryTCUpdator {
+	static Map<String, Long> tcMap;
 
-	String project() default "";
+	public boolean updateResult(String scriptName, TestCaseRunResult result) {
+		boolean succes = false;
+		// get runid from map for scriptname update result using runid
+		return succes;
+	}
 
-	String release() default "";
+	public static void setMap(String scheduleXml) {
+		// call this method on test suit start up to map test script name with
+		// run-id
+	}
 
-	/**
-	 * map with QMetry test case run id. separate with comma if more than one
-	 * run id to map
-	 * 
-	 * @return
-	 */
-	String runId() default "";
-
-	String testScriptName() default "";
-
-	/**
-	 * mark for not to map with QMetry
-	 * 
-	 * @return
-	 */
-	boolean skip() default false;
+	public static void clearMap() {
+		// call this method on test suit end to clear map
+	}
 }

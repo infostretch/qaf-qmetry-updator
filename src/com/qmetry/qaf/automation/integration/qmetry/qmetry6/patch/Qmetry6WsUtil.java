@@ -21,7 +21,7 @@
  * For any inquiry or need additional information, please contact support-qaf@infostretch.com
  *******************************************************************************/
 
-package com.infostretch.automation.integration.qmetry.qmetry6;
+package com.qmetry.qaf.automation.integration.qmetry.qmetry6.patch;
 
 import java.io.File;
 
@@ -30,11 +30,12 @@ import org.apache.log4j.Logger;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.infostretch.automation.core.ConfigurationManager;
-import com.infostretch.automation.keys.ApplicationProperties;
-import com.infostretch.automation.util.FileUtil;
-import com.infostretch.automation.util.PropertyUtil;
-import com.infostretch.automation.ws.rest.RestTestBase;
+import com.qmetry.qaf.automation.core.ConfigurationManager;
+import com.qmetry.qaf.automation.integration.qmetry.qmetry6.QmetryRestWrapper;
+import com.qmetry.qaf.automation.keys.ApplicationProperties;
+import com.qmetry.qaf.automation.util.FileUtil;
+import com.qmetry.qaf.automation.util.PropertyUtil;
+import com.qmetry.qaf.automation.ws.rest.RestTestBase;
 
 public class Qmetry6WsUtil {
 	QmetryRestWrapper rest = new QmetryRestWrapper();
@@ -69,8 +70,6 @@ public class Qmetry6WsUtil {
 			drop = ApplicationProperties.INTEGRATION_PARAM_QMETRY_DROP.getStringVal();
 			log.info("Qmetry6 scheduled prj: " + prj + " rel : " + rel + " build: " + build + " suite: " + suite
 					+ " platform: " + platform + " drop: " + drop);
-
-			// }
 
 		} catch (Exception ex) {
 			log.error("Error during init Qmetry6WSUtil: ", ex);

@@ -10,7 +10,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.infostretch.automation.integration.qmetry.qmetry6;
+package com.qmetry.qaf.automation.integration.qmetry.qmetry6;
 
 import java.io.BufferedReader;
 import java.io.IOException;

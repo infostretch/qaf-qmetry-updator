@@ -21,7 +21,7 @@
  * For any inquiry or need additional information, please contact support-qaf@infostretch.com
  *******************************************************************************/
 
-package com.infostretch.automation.integration.qmetry.qmetry6;
+package com.qmetry.qaf.automation.integration.qmetry.qmetry6.patch;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -37,6 +37,7 @@ import java.util.Map;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.FileBody;
@@ -48,9 +49,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.infostretch.automation.integration.TestCaseRunResult;
-import com.infostretch.automation.util.StringUtil;
-import com.infostretch.automation.ws.rest.RestTestBase;
+import com.qmetry.qaf.automation.integration.TestCaseRunResult;
+import com.qmetry.qaf.automation.util.StringUtil;
+import com.qmetry.qaf.automation.ws.rest.RestTestBase;
 import com.sun.jersey.api.client.WebResource.Builder;
 
 public class QMetryRestWebservice {
@@ -307,11 +308,9 @@ public class QMetryRestWebservice {
 					builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
 
 					FileBody bin = new FileBody(filePath);
-					builder.addTextBody("desc", "Attached on " + CurrentDate,
-							org.apache.http.entity.ContentType.TEXT_PLAIN);
-					builder.addTextBody("type", "TCR", org.apache.http.entity.ContentType.TEXT_PLAIN);
-					builder.addTextBody("entityId", String.valueOf(testCaseRunId),
-							org.apache.http.entity.ContentType.TEXT_PLAIN);
+					builder.addTextBody("desc", "Attached on " + CurrentDate, ContentType.TEXT_PLAIN);
+					builder.addTextBody("type", "TCR", ContentType.TEXT_PLAIN);
+					builder.addTextBody("entityId", String.valueOf(testCaseRunId), ContentType.TEXT_PLAIN);
 					builder.addPart("file", bin);
 
 					HttpEntity reqEntity = builder.build();
