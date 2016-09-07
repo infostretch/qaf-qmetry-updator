@@ -261,7 +261,7 @@ public class QMetryRestWebservice {
 	 *         for fail it may be 1001 etc.
 	 */
 	public String getRunStatusID(TestCaseRunResult status) {
-		JsonObject jsonObject = new Gson().fromJson(userInfo, JsonObject.class);
+		JsonObject jsonObject = new Gson().fromJson(userInfo, JsonElement.class).getAsJsonObject();
 		JsonArray array = jsonObject.get("allstatus").getAsJsonArray();
 
 		Map<String, String> statusMap = new HashMap<String, String>();
@@ -404,6 +404,7 @@ public class QMetryRestWebservice {
 	}
 
 	/**
+	 * 
 	 * @param baseURL
 	 * @param token
 	 *            - token generate using username and password
