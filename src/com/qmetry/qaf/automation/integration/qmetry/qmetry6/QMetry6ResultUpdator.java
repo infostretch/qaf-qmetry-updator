@@ -112,7 +112,7 @@ public class QMetry6ResultUpdator implements TestCaseResultUpdator {
 				: (id == 0 ? util.executeTestCaseWithoutID(scriptName, result.toQmetry6())
 						: util.executeTestCase(id, result.toQmetry6()));
 		;
-		logger.info("Update result staus using " + (isRunid ? "runid " : "tcid ") + id + " is: " + retVal);
+		logger.info("Update result staus using " + (isRunid ? "runid " :(id==0?"without tc_id":"tcid " + id) + " is: " + retVal));
 
 	}
 
