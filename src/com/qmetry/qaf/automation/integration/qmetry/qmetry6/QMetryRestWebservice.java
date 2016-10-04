@@ -598,7 +598,9 @@ public class QMetryRestWebservice {
 		createTcReq.addProperty("scope", "cycle");
 		createTcReq.addProperty("name", "AutoTestCase" + randomizer);
 		createTcReq.addProperty("testScriptName", scriptName);
-		createTcReq.addProperty("testingType", testingType);
+		
+		if (!StringUtil.isNullOrEmpty(testingType))
+			createTcReq.addProperty("testingType", testingType);
 		// post action to create new testcase
 		String response = tcBuidler.post(String.class, createTcReq.toString());
 		JsonObject testCaseResponse = new Gson().fromJson(response, JsonElement.class).getAsJsonObject();
