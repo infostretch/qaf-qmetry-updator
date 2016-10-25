@@ -104,7 +104,7 @@ public class QMetry6ResultUpdator implements TestCaseResultUpdator {
 		return false;
 	}
 
-	private Qmetry6WsUtil util = Qmetry6WsUtil.getInstance();
+	private Qmetry6RestClient util = Qmetry6RestClient.getInstance();
 
 	private void updateResult(long id, TestCaseRunResult result, boolean isRunid, String scriptName) {
 

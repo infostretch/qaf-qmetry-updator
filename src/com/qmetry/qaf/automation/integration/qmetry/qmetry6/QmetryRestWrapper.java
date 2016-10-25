@@ -87,7 +87,6 @@ public class QmetryRestWrapper {
 
 			responseCode = conn.getResponseCode();
 			responseMessage = conn.getResponseMessage();
-			System.out.println(method + " " + uri + " " + responseCode + " " + responseMessage);
 
 			BufferedReader br = null;
 			final StringBuilder sb = new StringBuilder(32);

@@ -22,7 +22,7 @@ of other open source software / files used by QMetry Automation Framework.
 For any inquiry or need additional information, please contact support-qaf@infostretch.com
 
 -->
- 
+
 <project basedir="." default="build" name="SeleniumAutomationFramework" xmlns:ivy="antlib:org.apache.ivy.ant">
 
 
@@ -32,14 +32,22 @@ For any inquiry or need additional information, please contact support-qaf@infos
 	</tstamp>
 
 	<property file="build.properties" />
+	<property name="test.dir" value="${basedir}/test" />
+	<property name="test.src.dir" value="${test.dir}/src" />
 
-	<path id="seleniumautomation.classpath">
+	<path id="build.classpath">
 		<fileset dir="${lib.dir}">
 			<include name="*.jar" />
 			<include name="**/*.jar" />
 		</fileset>
 	</path>
-
+	<path id="test.classpath">
+		<fileset dir="${dist.dir}">
+			<include name="*.jar" />
+			<include name="**/*.jar" />
+		</fileset>
+		<path refid="build.classpath" />
+	</path>
 	<!-- IVY -->
 	<target name="download-ivy" unless="skip.download">
 		<mkdir dir="${ivy.jar.dir}" />
@@ -61,7 +69,7 @@ For any inquiry or need additional information, please contact support-qaf@infos
 	<target name="resolve" description="--> retrieve dependencies with ivy" depends="install-ivy">
 		<ivy:resolve file="ivy.xml" />
 		<ivy:cachepath pathid="lib.path.id" />
-		<ivy:addpath topath="seleniumautomation.classpath">
+		<ivy:addpath topath="build.classpath">
 			<path refid="lib.path.id" />
 		</ivy:addpath>
 	</target>
@@ -69,6 +77,11 @@ For any inquiry or need additional information, please contact support-qaf@infos
 	<!-- ================================= target: init ================================= -->
 	<target name="init" depends="resolve">
 		<mkdir dir="${bin.dir}" />
+		<copy includeemptydirs="false" todir="${bin.dir}">
+			<fileset dir="${src.dir}">
+				<exclude name="**/*.java" />
+			</fileset>
+		</copy>
 	</target>
 
 	<!-- ================================= target: clean ================================= -->
@@ -80,7 +93,7 @@ For any inquiry or need additional information, please contact support-qaf@infos
 	<!-- ================================= target: compile ================================= -->
 	<target name="compile" depends="init">
 		<echo level="info">--- compile (start) ---</echo>
-		<javac srcdir="${src.dir}" destdir="${bin.dir}" classpathref="seleniumautomation.classpath" debug="false" source="${source}" target="${target}" />
+		<javac srcdir="${src.dir}" destdir="${bin.dir}" classpathref="build.classpath" debug="false" source="${source}" target="${target}" />
 		<echo level="info">--- compile (finished) ---</echo>
 	</target>
 
@@ -98,5 +111,54 @@ For any inquiry or need additional information, please contact support-qaf@infos
 				</section>
 			</manifest>
 		</jar>
+	</target>
+	<target name="make-jar" depends="clean, compile" description="build basic version">
+
+		<mkdir dir="${dist.dir}" />
+		<!-- All - core + testNG + step -->
+		<jar destfile="${dist.dir}/qaf-qmetry-updator.jar" basedir="${bin.dir}" excludes="**/test/**" includes="**/*.*">
+			<metainf dir="." includes="LICENSE.txt,NOTICE.txt" />
+			<manifest>
+				<attribute name="Vendor" value="Infostretch Corp." />
+				<attribute name="Built-By" value="${user.name}" />
+			</manifest>
+			<metainf dir="${src.dir}" includes="**/aop.xml" />
+			<service type="org.testng.ITestNGListener">
+				<provider classname="com.qmetry.qaf.automation.testng.pro.QAFAnnotationTransformer2" />
+
+				<provider classname="com.qmetry.qaf.automation.testng.pro.QAFInvokedMethodListener2" />
+
+				<provider classname="com.qmetry.qaf.automation.testng.pro.QAFMethodInterceptor" />
+
+				<provider classname="com.qmetry.qaf.automation.testng.pro.QAFResultListener" />
+				<provider classname="com.qmetry.qaf.automation.testng.pro.QAFSuiteListener" />
+			</service>
+		</jar>
+
+	</target>
+	<target name="test-compile" depends="init">
+		<taskdef classpathref="test.classpath" resource="org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties" />
+
+		<echo level="info">--- test compile (start) ---</echo>
+		<iajc source="${source}" target="${target}" showweaveinfo="true" verbose="true" destdir="${bin.dir}" debug="false">
+			<inpath location="${src.dir}">
+			</inpath>
+			<sourceroots>
+				<pathelement location="${test.src.dir}" />
+			</sourceroots>
+			<classpath refid="test.classpath">
+			</classpath>
+		</iajc>
+		<echo level="info">--- test compile (finished) ---</echo>
+	</target>
+
+	<target name="runtest" depends="make-jar,test-compile">
+		<taskdef resource="testngtasks" classpathref="test.classpath" />
+		<testng classpathref="test.classpath" workingDir="${test.dir}" outputDir="${test.dir}/test-results" haltOnFailure="true" verbose="2">
+			<classpath location="${bin.dir}" />
+			<xmlfileset dir="${test.dir}/config" includes="testrun_config.xml" />
+			<sysproperty key="log4j.configuration" value="file:///${test.dir}/log4j.properties" />
+			<sysproperty key="outputDir" value="test-results" />
+		</testng>
 	</target>
 </project>

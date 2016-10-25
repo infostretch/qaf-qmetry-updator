@@ -66,7 +66,6 @@ public class QmetryWSUtil {
 		log = Logger.getLogger(this.getClass());
 		log.info("Init :: QmetryWSUtil.");
 		try {
-			System.out.println(serviceUrl);
 			URL url = new URL(serviceUrl);
 			QMetryWSLocator loc = new QMetryWSLocator();
 			loc.setQMetryWSSOAPPort_HttpEndpointAddress(serviceUrl);
