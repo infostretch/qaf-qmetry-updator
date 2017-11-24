@@ -4,4 +4,4 @@ Result updator plugin for <a href="http://www.qmetry.com/" target="_blank">QMetr
 
 Add below dependency in your ivy.xml to add qmetry updator to your project
 
-< dependency org="com.qmetry" name="qaf-qmetry-updator" rev="latest.integration" >
+`<dependency org="com.qmetry" name="qaf-qmetry-updator" rev="latest.integration"/>`
